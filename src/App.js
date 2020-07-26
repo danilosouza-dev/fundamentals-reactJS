@@ -9,7 +9,7 @@ function App() {
     api.get("/repositories").then((response) => {
       setRepositories(response.data);
     });
-  }, [repositories]);
+  }, []);
 
   async function handleAddRepository() {
     const response = await api.post("/repositories", {
@@ -18,13 +18,17 @@ function App() {
       techs: ["NodeJS", "ReactJS", "React Native"],
     });
 
-    const repository = response;
 
-    setRepositories([...repositories, repository]);
+    setRepositories([...repositories, response.data]);
   }
 
   async function handleRemoveRepository(id) {
+
     await api.delete(`/repositories/${id}`);
+
+    const repositoryIndex = repositories.findIndex(repository => repository.id === id);
+    repositories.splice(repositoryIndex, 1)
+
     setRepositories([...repositories]);
   }
   return (
